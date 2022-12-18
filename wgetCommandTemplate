@@ -5,7 +5,7 @@ wget "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-c
 
 Edited Example Command (using my own Google Drive Link):
 
-wget "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=15hobfe8Aww4Gs333QAF3KrB8tVyK6_RT' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=15hobfe8Aww4Gs333QAF3KrB8tVyK6_RT" -O SteamReviews.zip && -rm -rf /tmp/cookies.txt
+wget "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=15hobfe8Aww4Gs333QAF3KrB8tVyK6_RT' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=15hobfe8Aww4Gs333QAF3KrB8tVyK6_RT" -O SteamReviews.zip && rm -rf /tmp/cookies.txt
 
 
 
