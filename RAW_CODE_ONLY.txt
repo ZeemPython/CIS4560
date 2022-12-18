@@ -1,0 +1,79 @@
+wget "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies
+/tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=FILEID' -O- | sed -rn 's/.*confirm=([0-9A-Zaz_]+).*/\1\n/p')&id=FILEID" -O SteamReviews.zip && rm -rf /tmp/cookies.txt
+
+
+ssh yourUsername@144.24.14.145
+password
+
+
+ls
+unzip SteamReviews.zip
+ls
+du -h steam_reviews.csv
+cat steam_reviews.csv | head -5
+
+
+hdfs dfs -mkdir /user/yourName/SteamReviews
+hdfs dfs -mkdir /user/yourName/tmp
+hdfs dfs -ls
+hdfs dfs -put steam_reviews.csv /user/yourName/SteamReviews
+hdfs dfs -ls SteamReviews/
+
+
+beeline
+create database SteamReviewer;
+use SteamReviewer;
+
+CREATE EXTERNAL TABLE SteamReviews(
+index INT,
+app_ID STRING,
+app_name STRING,
+review_ID STRING,
+language STRING,
+reviewText STRING,
+timestamp_created STRING,
+timestamp_updated STRING,
+recommended BOOLEAN,
+votes_helpful INT,
+votes_funny INT,
+weight_vote_score DOUBLE,
+comment_count INT,
+steam_purchase BOOLEAN,
+received_for_free BOOLEAN,
+written_during_early_access BOOLEAN,
+author_steamID STRING,
+author_num_games_owned INT,
+author_num_reviews INT,
+author_playtime_forever BIGINT,
+author_playtime_last_two_weeks BIGINT,
+author_playtime_at_review BIGINT,
+author_last_played STRING)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ","
+LOCATION "/user/yourName/SteamReviews"
+TBLPROPERTIES ('skip.header.line.count' = '1');
+
+SELECT * FROM SteamReviews LIMIT 3;
+SELECT * COUNT (*) FROM SteamReviews;
+
+CREATE VIEW steamreview_reduced AS SELECT index, app_id, app_name, language, reviewText, timestamp_created FROM SteamReviews;
+
+SELECT * FROM steamreview_reduced limit 10;
+
+INSERT OVERWRITE DIRECTORY '/user/yourName/tmp/'
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+SELECT * FROM steamreview_reduced;
+
+hdfs dfs -ls tmp/
+hdfs dfs -get /user/yourName/tmp/000000_0
+
+ls
+du -h 000000_0
+
+
+hadoop version
+
+yarn node -list -all
+
+free -h
+
+lscpu
